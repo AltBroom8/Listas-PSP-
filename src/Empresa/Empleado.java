@@ -81,3 +81,4 @@ public class Empleado {
         this.sueldoMaximo = sueldoMaximo;
     }
 }
+

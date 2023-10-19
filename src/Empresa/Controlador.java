@@ -1,6 +1,10 @@
 // Clase Controlador que maneja una lista de empleados
 package Empresa;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+
 public class Controlador {
 
     public int contador; // Contador para rastrear el número de nodos en la lista
@@ -61,6 +65,34 @@ public class Controlador {
         }
         return exito;
     }
+
+    public void ordenarPorFechaAlta(boolean a) {
+        for (Nodo i = inicial; i != null; i = i.getSig()) {
+            for (Nodo j = i.getSig(); j != null; j = j.getSig()) {
+                Empleado emp1 = (Empleado) i.actual;
+                Empleado emp2 = (Empleado) j.actual;
+                if(a){
+                    if (compareFechas(emp1.getFechaAlta(), emp2.getFechaAlta()) > 0) {
+                        Object temp = i.actual;
+                        i.actual = j.actual;
+                        j.actual = temp;
+                    }
+                }else{
+                    if (compareFechas(emp1.getFechaAlta(), emp2.getFechaAlta()) < 0) {
+                        Object temp = i.actual;
+                        i.actual = j.actual;
+                        j.actual = temp;
+                    }
+                }
+
+            }
+        }
+    }
+
+    private int compareFechas(GregorianCalendar fecha1, GregorianCalendar fecha2) {
+        return fecha1.compareTo(fecha2);
+    }
+
 
     // Método privado para eliminar un objeto de la lista
     private boolean elimina(Object a) {

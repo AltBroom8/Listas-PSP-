@@ -18,11 +18,18 @@ public class Main extends JFrame {
     Controlador listado = new Controlador(); // Inicialización de un objeto Controlador
     Controlador.Nodo auxiliar = listado.inicial; // Referencia a un nodo en la lista de Controlador
     private boolean mod; // Variable booleana para controlar el estado de modificación
-
+    private boolean fecha;
     // Constructor de la clase Main
     public Main() {
         mod = false; // Establece la bandera de modificación en falso al principio
-        this.setSize(600, 400); // Establece el tamaño de la ventana
+        fecha = true;
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException |
+                 IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        this.setSize(700, 400); // Establece el tamaño de la ventana
         this.setTitle("Mi aplicación de mierda 2"); // Establece el título de la ventana
         setLocationRelativeTo(null); // Establece la ubicación de la ventana en el centro de la pantalla
         iniciarComponentes(); // Inicializa los componentes de la interfaz gráfica
@@ -141,13 +148,15 @@ public class Main extends JFrame {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 5, 20, 0)); // Se cambia de 3 a 5 para agregar los nuevos botones
 
 // Botones con más tamaño en el eje Y
-        JButton nuevoButton = new JButton("Nuevo");
+        JButton nuevoButton = new JButton("Nuevo \uD83E\uDD11");
         nuevoButton.setPreferredSize(new Dimension(nuevoButton.getPreferredSize().width, 60));
+        String moaiEmoji = "\uD83D\uDDFF";
 
-        JButton modButton = new JButton("Modificar"); // Nuevo botón de Modificar
+        JButton modButton = new JButton("Modificar " + moaiEmoji); // Nuevo botón de Modificar
         modButton.setPreferredSize(new Dimension(modButton.getPreferredSize().width, 60));
+        String devilEmoji = "\uD83D\uDC7F"; // Representación Unicode del emoji del diablo morado sonriente
 
-        JButton delButton = new JButton("Eliminar"); // Nuevo botón de Eliminar
+        JButton delButton = new JButton("Eliminar "+ devilEmoji); // Nuevo botón de Eliminar
         delButton.setPreferredSize(new Dimension(delButton.getPreferredSize().width, 60));
 
         JButton antButton = new JButton("Ant");
@@ -156,18 +165,40 @@ public class Main extends JFrame {
         JButton sigButton = new JButton("Sig");
         sigButton.setPreferredSize(new Dimension(sigButton.getPreferredSize().width, 60));
 
+        JButton ordenarPorFechaButton = new JButton("Fecha ↑");
+        ordenarPorFechaButton.setPreferredSize(new Dimension(sigButton.getPreferredSize().width, 60));
+
 // Añade los botones al panel
         buttonPanel.add(nuevoButton);
         buttonPanel.add(modButton);
         buttonPanel.add(delButton);
         buttonPanel.add(antButton);
         buttonPanel.add(sigButton);
+        buttonPanel.add(ordenarPorFechaButton);
 
 // Añade los componentes al panel2
         panel2.setLayout(new BorderLayout());
         panel2.add(empleadoLabel, BorderLayout.NORTH);
         panel2.add(infoPanel, BorderLayout.CENTER);
         panel2.add(buttonPanel, BorderLayout.SOUTH);
+// ActionListener para el botón de Fecha
+        ordenarPorFechaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listado.ordenarPorFechaAlta(!fecha);
+                Empleado datos = (Empleado) auxiliar.actual;
+                nombreEmpleadoLabel.setText(datos.getNombre());
+                numeroEmpleadoLabel.setText(String.valueOf(datos.getNumero()));
+                sueldoEmpleadoLabel.setText(String.valueOf(datos.getSueldo()));
+                sueldoMaxEmpleadoLabel.setText(String.valueOf(datos.getSueldoMaximo()));
+                fecha = !fecha;
+                if(fecha){
+                    ordenarPorFechaButton.setText("Fecha ↑");
+                }else {
+                    ordenarPorFechaButton.setText("Fecha ↓");
+                }
+            }
+        });
 
 // ActionListener para el botón de Modificar
         // Agrega un ActionListener al botón modButton
